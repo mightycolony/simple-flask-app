@@ -1,0 +1,20 @@
+---
+# tasks file for mysql_db
+- name: Start Mysql service
+  shell: service mysql start
+
+- name: Create DB user
+  mysql_user:
+     name: "{{ db_user }}"
+     password: "{{ db_password}}"
+     priv: '*.*:ALL'
+     state: present
+     host: '%'
+     login_unix_socket: /var/run/mysqld/mysqld.sock
+
+- name: Create Application Database
+  mysql_db:
+     name: "{{ db_name }}"
+     state: present
+     login_user: "{{ db_user }}"
+     login_password: "{{ db_password }}"
